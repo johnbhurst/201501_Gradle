@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "Main"
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile 'org.slf4j:slf4j-api:1.7.7'
+  runtime 'org.slf4j:slf4j-simple:1.7.7'
+}
