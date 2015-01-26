@@ -1,0 +1,4 @@
+include "multimodule-domain",
+        "multimodule-service-api",
+        "multimodule-service-impl"
+
