@@ -1,0 +1,9 @@
+apply plugin: "java"
+
+configurations {
+  myextra
+}
+
+task configs << {
+  configurations.each {println it}
+}
