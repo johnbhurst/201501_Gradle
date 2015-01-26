@@ -1,0 +1,19 @@
+apply plugin: 'groovy'
+
+group = "example"
+version = "1.0"
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  compile gradleApi()
+
+  compile "commons-codec:commons-codec:1.8"
+  compile "commons-lang:commons-lang:2.5"
+  compile "org.codehaus.groovy:groovy-all:2.4.0"
+  compile "org.springframework:spring-core:4.1.4.RELEASE"
+
+  testCompile "junit:junit:4.11"
+}
