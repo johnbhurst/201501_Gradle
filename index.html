@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<title>Java 8: New Features for the 21st Century</title>
+<title>Gradle: The Better Build Tool</title>
 <meta name="viewport" content="width=1024, user-scalable=no"/>
 <link rel="stylesheet" href="deck-1.1/core/deck.core.css" type="text/css"/>
 <link rel="stylesheet" href="deck-1.1/extensions/goto/deck.goto.css" type="text/css"/>
@@ -28,861 +28,154 @@
 <article class="deck-container">
 
 <div class="slide">
-<h2>Java 8: New Features for the 21st Century</h2>
-<h3>Evolution of the Mainstream</h3>
+<h2>Gradle: The Better Build Tool</h2>
+<h3>Powerful and Flexible</h3>
 <ul>
 <div class="slide">
-<li>Upgrade Experiences</li>
-<li>Lambdas</li>
-<li>Changes to interfaces</li>
-<li>Streams</li>
-<li>JSR310 Date/Time API</li>
 <li>Examples</li>
 </div>
 </ul>
 </div>
 
-<!--***************************************************************************
-  0: Upgrade experiences
-****************************************************************************-->
 <div class="slide">
-<h2>Upgrade Experiences</h2>
+<h2>Build Tools</h2>
+<div class="slide">
+<h3>Ant</h3>
+<ul >
+<li>Flexible, but verbose</li>
+<li>Too much boilerplate</li>
+<li>Lack of standardization</li>
+<li>But lots of 3rd party tools support</li>
+</ul>
+<div class="slide">
+<h3>Maven</h3>
 <ul>
-<li>Upgraded major apps to Java 8 runtime in week of Mar 18</li>
+<li>Not so flexible</li>
+<li>Still somewhat verbose (XML)</li>
+<li>Standardized build</li>
+<li>Some 3rd party tool support</li>
+</ul>
 <div class="slide">
-<li>Upgraded source to start using Java 8 features the following week</li>
-<div class="slide">
-<li>Spring 3 does not support Java 8</li>
-<div class="slide">
-<li>Spring uses Java @Deprecated feature</li>
-<div class="slide">
-<li>Java does not use Java @Deprecated feature</li>
+<h3>Gradle</h3>
+<ul>
+<li>Standardized, but flexible</li>
+<li>Domain Specific Language for describing build</li>
+<li>Plugin-based (even to compile Java)</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
+
+<div class="slide">
+<h2>The Gradle Way</h2>
+<ul>
+<li>Use Standard build conventions</li>
+<li>But change what you need to</li>
+<li>Can script with Groovy</li>
+<li>But don't get carried away</li>
 </ul>
 </div>
 
 <div class="slide">
-<h2>Date/Time API: New code using deprecated APIs</h2>
-<p>In java.sql.Date:</p>
-<pre class="brush:java">
-  /**
-   * Obtains an instance of {@code Date} from a {@link LocalDate} object
-   * with the same year, month and day of month value as the given
-   * {@code LocalDate}.
-   * &lt;p&gt;
-   * The provided {@code LocalDate} is interpreted as the local date
-   * in the local time zone.
-   *
-   * @param date a {@code LocalDate} to convert
-   * @return a {@code Date} object
-   * @exception NullPointerException if {@code date} is null
-   * @since 1.8
-   */
-  @SuppressWarnings("deprecation")
-  public static Date valueOf(LocalDate date) {
-      return new Date(date.getYear() - 1900, date.getMonthValue() -1,
-                      date.getDayOfMonth());
-  }
-</pre>
-</div>
-
-<!--***************************************************************************
-  1: LAMBDAS
-****************************************************************************-->
-
-<div class="slide">
-<h2>Lambdas</h2>
+<h2>Fundamental Concepts</h2>
 <ul>
-<li>Function Literals</li>
-</ul>
-
-<div class="slide">
-<h3>Out with the old...</h3>
-<pre class="brush:java">
-  new Thread(new Runnable() {
-    @Override
-    public void run() {
-      System.out.println("Hello, World.");
-    }
-  });
-</pre>
-
-<div class="slide">
-<h3>And in with the new...</h3>
-<pre class="brush:java">
-  new Thread(() -> {
-    System.out.println("Hello, World.");
-  });
-</pre>
-</div>
-</div>
-</div>
-
-<!--
-<div class="slide">
-<h2>Lambdas</h2>
-<ul>
-<li>Use anywhere there is a "Functional Interface"</li>
-<li>Comes in two basic types: capturing and non-capturing</li>
-</ul>
-</div>
--->
-
-<div class="slide">
-<h2>Lambdas</h2>
-<ul>
-<li>Strategy Pattern</li>
-<div class="slide">
-<li>Parameterized Behaviour</li>
-<div class="slide">
-<li>Separation of what and how</li>
-<div class="slide">
-<li>E.g.: Iteration over a collection</li>
-<div class="slide">
-<li>E.g.: Reading a file</li>
-<div class="slide">
-<li>E.g.: Running a database query</li>
-</div>
-</div>
-</div>
-</div>
-</div>
+<li>Projects</li>
+<li>Tasks</li>
+<li>Configurations</li>
+<li>Dependencies</li>
 </ul>
 </div>
 
 <div class="slide">
-<h2>Lambdas: Uses</h2>
-<ul>
-<li>Runnable</li>
-<pre class="brush:java">
-  Runnable runnable = () -> System.out.println("Hello");
-</pre>
-<div class="slide">
-<li>Callable</li>
-<pre class="brush:java">
-  Callable&lt;String&gt; callable = () -> "Hello";
-</pre>
-<div class="slide">
-<li>Comparator</li>
-<pre class="brush:java">
-  Comparator&lt;String&gt; comparator =
-    (a, b) -> a.toUpperCase().compareTo(b.toUpperCase());
-</pre>
-<div class="slide">
-<li>Event handlers</li>
-<pre class="brush:java">
-  ActionListener actionListener = event -> textArea.setText("Hello");
-</pre>
-<div class="slide">
-<li>With java.util.function interfaces</li>
-<div class="slide">
-<li>With Streams</li>
-</div>
-</div>
-</div>
-</div>
-</div>
-</ul>
+<h2>Lifecycle</h2>
+Diagram goes here.
 </div>
 
 <div class="slide">
-<h2>java.util.function</h2>
-<img align="left" src="images/JavaUtilFunction.png">
-
-<div class="slide">
-<pre class="brush:java">
-public interface Function&lt;T, R&gt; {
-  R apply(T t);
-  //...
-}
-</pre>
-</div>
-</div>
-
-<div class="slide">
-<h2>Function literals as expressions</h2>
-<ul>
-<li>Lambda expressions</li>
-<pre class="brush:java">
-  Function&lt;String, String&gt; f = x -> x.toUpperCase();
-  assertEquals("ONE", f.apply("one"));
-</pre>
-<div class="slide">
-<li>Method references</li>
-<pre class="brush:java">
-  Function&lt;String, String&gt; g = String::toUpperCase;
-  assertEquals("TWO", g.apply("two"));
-</pre>
-<div class="slide">
-<li>Constructor references</li>
-<pre class="brush:java">
-  Supplier&lt;Map&lt;String, Integer&gt;&gt; creator = TreeMap::new;
-  Map&lt;String, Integer&gt; map = creator.get();
-  assertEquals(TreeMap.class, map.getClass());
-  </pre>
-</div>
-</div>
-</ul>
-</div>
-
-<div class="slide">
-<h2>@FunctionalInterface</h2>
-<ul>
-<li>New marker annotation, added to many interfaces in JDK</li>
-<div class="slide">
-<li>Interface with exactly one abstract method</li>
-<div class="slide">
-<li>Compiler checks to ensure annotated interface meets the requirements</li>
-<div class="slide">
-<li>Not required -- stuff just works, but this can be added for clarity and checking</li>
-</div>
-</div>
-</div>
-</ul>
-</div>
-
-<!--
-<div class="slide">
-<h2>Gotchas</h2>
-<p>Some gotchas currently apply!</p>
-<pre class="brush:java">
-
-</pre>
-</div>
--->
-
-<!--***************************************************************************
-  3: INTERFACES
-****************************************************************************-->
-<div class="slide">
-<h2>Interfaces</h2>
-<ul>
-<li>Interfaces can now have static methods</li>
-<div class="slide">
-<li>Interfaces can now have default implementations for instance methods</li>
-<div class="slide">
-<li>This can be used to add new members without breaking compatibility</li>
-<div class="slide">
-<li>Used heavily by JDK8 library -- many interfaces have new methods added</li>
-</div>
-</div>
-</div>
-</div>
-
-<div class="slide">
-<h2>Example: Comparator</h2>
-<p>You thought you knew this interface?</p>
-<pre class="brush:java">
-
-public interface Comparator&lt;T&gt; {
-  int compare(T o1, T o2);
-}
-
-</pre>
-</div>
-</ul>
-</div>
-
-<div class="slide">
-<h2>Example: Comparator</h2>
-<p>Look at it now!</p>
-<pre class="brush:java">
-@FunctionalInterface
-public interface Comparator&lt;T&gt; {
-  int compare(T o1, T o2);
-  default Comparator&lt;T&gt; reversed() {...}
-  default Comparator&lt;T&gt; thenComparing(Comparator&lt;? super &gt;> other) {...}
-  default &lt;U&gt; Comparator&lt;T&gt; thenComparing(
-            Function&lt;? super T, ? extends U&gt; keyExtractor,
-            Comparator&lt;? super U&gt; keyComparator) {...}
-  default &lt;U extends Comparable&lt;? super U&gt;&gt; Comparator&lt;T&gt; thenComparing(
-            Function&lt;? super T, ? extends U&gt; keyExtractor) {...}
-  default Comparator&lt;T&gt; thenComparingInt(ToIntFunction&lt;? super T&gt; keyExtractor) {...}
-  default Comparator&lt;T&gt; thenComparingLong(ToLongFunction&lt;? super T&gt; keyExtractor) {...}
-  default Comparator&lt;T&gt; thenComparingDouble(ToDoubleFunction&lt;? super T&gt; keyExtractor) {...}
-  public static &lt;T extends Comparable&lt;? super T&gt;&gt; Comparator&lt;T&gt; reverseOrder() {...}
-  public static &lt;T extends Comparable&lt;? super T&gt;&gt; Comparator&lt;T&gt; naturalOrder() {...}
-  public static &lt;T&gt; Comparator&lt;T&gt; nullsFirst(Comparator&lt;? super T&gt; comparator) {...}
-  public static &lt;T&gt; Comparator&lt;T&gt; nullsLast(Comparator&lt;? super T&gt; comparator) {...}
-  public static &lt;T, U&gt; Comparator&lt;T&gt; comparing(
-            Function&lt;? super T, ? extends U&gt; keyExtractor,
-            Comparator&lt;? super U&gt; keyComparator) {...}
-  public static &lt;T, U extends Comparable&lt;? super U&gt;&gt; Comparator&lt;T&gt; comparing(
-            Function&lt;? super T, ? extends U&gt; keyExtractor) {...}
-  public static &lt;T&gt; Comparator&lt;T&gt; comparingInt(ToIntFunction&lt;? super T&gt; keyExtractor) {...}
-  public static &lt;T&gt; Comparator&lt;T&gt; comparingLong(ToLongFunction&lt;? super T&gt; keyExtractor) {...}
-  public static&lt;T&gt; Comparator&lt;T&gt; comparingDouble(ToDoubleFunction&lt;? super T&gt; keyExtractor) {...}
-}
-</pre>
-</div>
-
-<!--***************************************************************************
-  4: STREAMS
-****************************************************************************-->
-
-<div class="slide">
-<h2>Streams</h2>
-<ul>
-<li>New API for iteration</li>
-<div class="slide">
-<li>Allows for lazy and parallel processing of streams of data</li>
-<div class="slide">
-<li>Allows for a more "functional" style of programming with streams of data</li>
-<div class="slide">
-<li>"Streams of data" commonly taken to mean "collections"</li>
-<div class="slide">
-<li>But can be other things, e.g. input stream from file/network/etc</li>
-</div>
-</div>
-</div>
-</div>
-</ul>
-</div>
-
-<div class="slide">
-<h2>Streams: Basics: .forEach()</h2>
-<ul>
-<li>New method: .forEach(), provides</li>
-<pre class="brush:java">
-  Stream&lt;Integer&gt; ints = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).stream();
-
-  ints.forEach(value -> {
-    System.out.println("value = " + value);
-  });
-</pre>
-<div class="slide">
-<li>.forEach() is defined on Iterable and on Stream</li>
-</div>
-</ul>
-</div>
-
-<div class="slide">
-<h2>Streams: .forEach for procedural code</h2>
-<p>You cannot do this:</p>
-<pre class="brush:java">
-  int sum = 0;
-  ints.forEach(value -> {
-    sum += value;
-  });
-</pre>
-<div class="slide">
-<p>Because although lambdas capture variables in their scope,
-they must be effectively final.</p>
-</div>
-</div>
-
-<div class="slide">
-<h2>Streams: returning results</h2>
-<p>To return results from a Stream, you typically use a Collector.</p>
-<pre class="brush:java">
-  int sum = ints.collect(Collectors.summingInt(x -> x));
-  assertEquals(55, sum);
-</pre>
-<div class="slide">
-<p>JDK8 provides many useful Collectors via factory methods in the Collectors class.</p>
-<div class="slide">
-<p>.collect() is an example of a terminating method.</p>
-<p>Streams can have any number of non-terminating methods called, before a single terminating method, which consumes the stream.</p>
-<div class="slide">
-<pre class="brush:java">
-  int sumEvens = ints.filter(x -> x % 2 ==0).collect(Collectors.summingInt(x -> x));
-  assertEquals(30, sumEvens);
-</pre>
-</div>
-</div>
-</div>
-</div>
-
-<div class="slide">
-<h2>Streams are consumed</h2>
-<p>You cannot reuse them:</p>
-<pre class="brush:java">
-  Stream&lt;Integer&gt; ints = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).stream();
-  Predicate&lt;Integer&gt; isEven = v -&gt; (v &amp; 1) == 0;
-  Predicate&lt;Integer&gt; isOdd = v -&gt; (v &amp; 1) == 1;
-  List&lt;Integer&gt; evens = ints.filter(isEven).collect(Collectors.toList());
-  List&lt;Integer&gt; odds = ints.filter(isOdd).collect(Collectors.toList()); // ERROR
-</pre>
-<p>throws IllegalStateException.</p>
-</div>
-
-<!--***************************************************************************
-  4: DATE/TIME API
-****************************************************************************-->
-<div class="slide">
-<h2>Date/Time API (JSR310)</h2>
-<ul>
-<li>Joda-Time started by Stephen Colebourne in 2003</li>
-<div class="slide">
-<li>Joda-Time: 1,752 commits</li>
-<div class="slide">
-<li>Joda-Time: 232 classes</li>
-<div class="slide">
-<li>java.time.*: 82 classes and interfaces</li>
-</div>
-</div>
-</div>
-</ul>
-</div>
-
-<div class="slide">
-<h2>Date/Time API</h2>
-<ul>
-<li>Sensible abstractions, a class for each concept</li>
-<div class="slide">
-<li>All values are immutable and thread-safe</li>
-<div class="slide">
-<li>Includes thread-safe formatting and parsing</li>
-</div>
-</div>
-</ul>
-</div>
-
-<div class="slide">
-<h2>Date/Time API: Main classes</h2>
-<ul>
-<li>LocalDate</li>
-<div class="slide">
-<li>LocalDateTime</li>
-<div class="slide">
-<li>LocalTime</li>
-<div class="slide">
-<li>ZonedDateTime</li>
-</div>
-</div>
-</div>
-</ul>
-</div>
-
-<div class="slide">
-<h2>Date/Time API: Other value classes</h2>
-<ul>
-<li>Instant (a point in time in nanosecond precision)</li>
-<div class="slide">
-<li>Month</li>
-<li>MonthDay</li>
-<li>Year</li>
-<li>YearMonth</li>
-<div class="slide">
-<li>Duration (a quantity of time in seconds and nanoseconds)</li>
-<li>Period (a quantity of time in years, months and days)</li>
-</div>
-</div>
-</ul>
-</div>
-
-<div class="slide">
-<h2>Date/Time API: LocalDate Example</h2>
-<pre class="brush:java">
-  GregorianCalendar cal = new GregorianCalendar(2014, 3, 15);
-  cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-  Date date = cal.getTime();
-
-  LocalDate ld = LocalDate.of(2014, 4, 15);
-
-  assertEquals(ld, date.toInstant().atZone(ZoneOffset.UTC).toLocalDate());
-  assertEquals(2014, ld.getYear());
-  assertEquals("2014-04-15", ld.toString());
-  assertEquals("15 Apr", ld.format(DateTimeFormatter.ofPattern("dd MMM")));
-</pre>
-</div>
-
-<div class="slide">
-<h2>Date/Time API: LocalDateTime Example</h2>
-<pre class="brush:java">
-  GregorianCalendar cal = new GregorianCalendar(2014, 3, 15, 11, 56, 43);
-  cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-  Date date = cal.getTime();
-
-  LocalDateTime ldt = LocalDateTime.of(2014, 4, 15, 11, 56, 43);
-
-  assertEquals(ldt, date.toInstant().atZone(ZoneOffset.UTC).toLocalDateTime());
-  assertEquals(11, ldt.getHour());
-</pre>
-</div>
-
-<!--***************************************************************************
-  5: EXAMPLE
-****************************************************************************-->
-<div class="slide">
-<h2>Example: How does it all work together?</h2>
-<p>A program to read files containing data like this:</p>
+<h2>Configuration</h2>
 <pre class="brush:plain">
-#
-#Thu Oct 18 09:57:24 NZDT 2007
-ROWS_AFFECTED=854
-STMT_END_TIME=1192654644507
-USER_NAME=jhurst
-CONNECTION_TYPE=ORACLE9I
-DATABASE=AXIS_T
-STMT_NO=1
-STMT_TIME=1192654642868
-STATUS=Success
-HOST_ADDRESS=127.0.1.1
-CALLER=Query Analyzer (Execute)
-SERVER_NAME=AXIS_T
-</pre>
-<div class="slide">
-<p>And produce counts and histogram of files per month:</p>
-<pre class="brush:plain">
-2007-10:   587 **********************************************************
-2007-11:   271 ***************************
-2007-12:   715 ***********************************************************************
-...
-</pre>
-</div>
-</div>
-
-<div class="slide">
-<h2>Example 1: Java 5</h2>
-<p>Main program:</p>
-<pre class="brush:java">
-  public static void main(String[] args) throws IOException {
-    File dir = new File(args[0]);
-    SortedMap&lt;String, Integer&gt; yearMonthCounts = getYearMonthCounts(dir);
-    for (String yearMonth : yearMonthCounts.keySet()) {
-      int count = yearMonthCounts.get(yearMonth);
-      String stars = stars(count);
-      System.out.println(String.format("%s: %5d %s", yearMonth, count, stars));
-    }
-  }
-</pre>
-<div class="slide">
-<pre class="brush:java">
-  private static String stars(int count) {
-    return count &lt; 10 ? "" :
-      String.format("%0" + count/10 + "d", 0).replace("0", "*");
-  }
-</pre>
-</div>
-</div>
-
-<div class="slide">
-<h2>Example 1: Java 5</h2>
-<p>Scanning files in a directory:</p>
-<pre class="brush:java">
-  private static SortedMap&lt;String, Integer&gt; getYearMonthCounts(File dir) throws IOException {
-    SortedMap&lt;String, Integer&gt; result = new TreeMap&lt;String, Integer&gt;();
-    for (File file : dir.listFiles(HdrFilenameFilter.INSTANCE)) {
-      String yearMonth = getYearMonth(file);
-      if (result.containsKey(yearMonth)) {
-        result.put(yearMonth, result.get(yearMonth) + 1);
-      }
-      else {
-        result.put(yearMonth, 1);
-      }
-    }
-    return result;
-  }
-</pre>
-<div class="slide">
-<pre class="brush:java">
-  private static class HdrFilenameFilter implements FilenameFilter {
-    public static final FilenameFilter INSTANCE = new HdrFilenameFilter();
-    @Override
-    public boolean accept(File dir, String name) {
-      return name.endsWith(".hdr");
-    }
-  }
-</pre>
-</div>
-</div>
-
-<div class="slide">
-<h2>Example 1: Java 5</h2>
-<p>Reading the required data from one file:</p>
-<pre class="brush:java">
-  private static String getYearMonth(File file) throws IOException {
-    BufferedReader reader = new BufferedReader(new FileReader(file));
-    try {
-      String line = "";
-      while (line != null) {
-        line = reader.readLine();
-        if (line != null &amp;&amp; line.startsWith("STMT_TIME=")) {
-          Date date = date(line.substring(10));
-          return FORMAT.format(date);
-        }
-      }
-    }
-    finally {
-      reader.close();
-    }
-    throw new RuntimeException("No STMT_TIME line found");
-  }
+~/.gradle/init.gradle
+~/.gradle/init.d/*.gradle
 </pre>
 </div>
 
 <div class="slide">
-<h2>Example 2: Java 7</h2>
-<p>Main program:</p>
-<pre class="brush:java">
-  public static void main(String[] args) throws IOException {
-    Path dir = Paths.get(args[0]);
-    SortedMap&lt;String, Integer&gt; yearMonthCounts = getYearMonthCounts(dir);
-    for (String yearMonth : yearMonthCounts.keySet()) {
-      int count = yearMonthCounts.get(yearMonth);
-      String stars = stars(count);
-      System.out.println(String.format("%s: %5d %s", yearMonth, count, stars));
-    }
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 2: Java 7</h2>
-<p>Scanning files in a directory:</p>
-<pre class="brush:java">
-  private static SortedMap&lt;String, Integer&gt; getYearMonthCounts(Path dir) throws IOException {
-    SortedMap&lt;String, Integer&gt; result = new TreeMap&lt;&gt;();
-    try (DirectoryStream&lt;Path&gt; paths = Files.newDirectoryStream(dir, "*.hdr")) {
-      for (Path file : paths) {
-        String yearMonth = getYearMonth(file);
-        if (result.containsKey(yearMonth)) {
-          result.put(yearMonth, result.get(yearMonth) + 1);
-        }
-        else {
-          result.put(yearMonth, 1);
-        }
-      }
-    }
-    return result;
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 2: Java 7</h2>
-<p>Reading the required data from one file:</p>
-<pre class="brush:java">
-  private static String getYearMonth(Path file) throws IOException {
-    try (BufferedReader reader = Files.newBufferedReader(file)) {
-      String line = null;
-      while ((line = reader.readLine()) != null) {
-        if (line.startsWith("STMT_TIME=")) {
-          Date date = date(line.substring(10));
-          return FORMAT.format(date);
-        }
-      }
-    }
-    throw new RuntimeException("No STMT_TIME line found");
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 3: Java 8 procedural</h2>
-<p>Main program:</p>
-<pre class="brush:java">
-  public static void main(String[] args) throws IOException {
-    Path dir = Paths.get(args[0]);
-    SortedMap&lt;YearMonth, Integer&gt; yearMonthCounts = getYearMonthCounts(dir);
-    yearMonthCounts.forEach((yearMonth, count) -> {
-      String stars = stars(count);
-      System.out.println(String.format("%s: %5d %s", yearMonth, count, stars));
-    });
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 3: Java 8 procedural</h2>
-<p>Scanning files in a directory:</p>
-<pre class="brush:java">
-  private static SortedMap&lt;YearMonth, Integer&gt; getYearMonthCounts(Path dir) throws IOException {
-    SortedMap&lt;YearMonth, Integer&gt; result = new TreeMap&lt;&gt;();
-    try (Stream&lt;Path&gt; files = Files.list(dir)
-      .filter(file -> file.toString().endsWith(".hdr"))) {
-      files.forEach(file -> {
-        YearMonth yearMonth = getYearMonth(file);
-        result.merge(yearMonth, 1, Math::addExact);
-      });
-    }
-    return result;
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 3: Java 8 procedural</h2>
-<p>Reading the required data from one file:</p>
-<pre class="brush:java">
-  private static YearMonth getYearMonth(Path file) {
-    try (Stream&lt;String&gt; lines = Files.lines(file)) {
-      lines.forEach(line -> {
-        if (line.startsWith("STMT_TIME=")) {
-          return yearMonth(line.substring(10)); // ERROR
-        }
-      });
-    }
-    catch (IOException ex) {
-      throw new RuntimeException(ex);
-    }
-    throw new RuntimeException("No STMT_TIME line found");
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 3: Java 8 procedural</h2>
-<p>Reading the required data from one file:</p>
-<pre class="brush:java">
-  private static YearMonth getYearMonth(Path file) {
-    YearMonth result = null;
-    try (Stream&lt;String&gt; lines = Files.lines(file)) {
-      lines.forEach(line -> {
-        if (line.startsWith("STMT_TIME=")) {
-          result = yearMonth(line.substring(10)); // ERROR
-        }
-      });
-    }
-    catch (IOException ex) {
-      throw new RuntimeException(ex);
-    }
-    if (result == null) {
-      throw new RuntimeException("No STMT_TIME line found");
-    }
-    return result;
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 3: Java 8 procedural</h2>
-<p>Reading the required data from one file:</p>
-<pre class="brush:java">
-  private static YearMonth getYearMonth(Path file) {
-    Date result = new Date(0);
-    try (Stream&lt;String&gt; lines = Files.lines(file)) {
-      lines.forEach(line -> {
-        if (line.startsWith("STMT_TIME=")) {
-          result.setTime(Long.parseLong(line.substring(10)));
-        }
-      });
-    }
-    catch (IOException ex) {
-      throw new RuntimeException(ex);
-    }
-    if (result.getTime() == 0L) {
-      throw new RuntimeException("No STMT_TIME line found");
-    }
-    return YearMonth.from(
-      LocalDateTime.ofInstant(result.toInstant(), ZoneOffset.UTC)
-    );
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 4: Java 8 functional</h2>
-<p>Main program:</p>
-<pre class="brush:java">
-  public static void main(String[] args) throws IOException {
-    Path dir = Paths.get(args[0]);
-    Map&lt;YearMonth, Long&gt; yearMonthCounts = getYearMonthCounts(dir);
-    yearMonthCounts.forEach((yearMonth, count) -> {
-      String stars = stars(count);
-      System.out.println(String.format("%s: %5d %s", yearMonth, count, stars));
-    });
-  }
-</pre>
-<div class="slide">
-<p>Complete with funky "functional" stars() method:</p>
-<pre class="brush:java">
-  private static String stars(Long count) {
-    return count< 10 ? "" :
-      Stream.generate(() -> "*")
-      .limit(count/10)
-      .reduce(String::concat).get();
-  }
-</pre>
-</div>
-</div>
-
-<div class="slide">
-<h2>Example 4: Java 8 functional</h2>
-<p>Scanning files in a directory</p>
-<pre class="brush:java">
-  private static Map&lt;YearMonth, Long&gt; getYearMonthCounts(Path dir) throws IOException {
-    try (Stream&lt;Path&gt; files = Files.list(dir)) {
-      return files
-        .filter(file -> file.toString().endsWith(".hdr"))
-        .collect(Collectors.groupingBy(
-          AdsFrequenciesWithJava8Functional::getYearMonth,
-          TreeMap::new,
-          Collectors.counting()
-        ));
-    }
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 4: Java 8 functional</h2>
-<p>Reading the required data from one file:</p>
-<pre class="brush:java">
-  private static YearMonth getYearMonth(Path file) {
-    try (Stream&lt;String&gt; lines = Files.lines(file)) {
-      return lines
-        .filter(line -> line.startsWith("STMT_TIME="))
-        .map(s -> s.substring(10))
-        .map(AdsFrequenciesWithJava8Functional::yearMonth)
-        .findAny()
-        .orElseThrow(RuntimeException::new);
-    }
-    catch (IOException ex) {
-      throw new RuntimeException(String.format("Exception reading file %s", file), ex);
-    }
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 5: Java 8 functional/parallel</h2>
-<p>Let's slow it down a little:</p>
-<pre class="brush:java">
-  return lines
-    .filter(line -> line.startsWith("STMT_TIME="))
-    .map(s -> s.substring(10))
-    .map(AdsFrequenciesWithJava8Parallel::slow)        // artificial 1ms delay
-    .map(AdsFrequenciesWithJava8Parallel::yearMonth)
-    .findAny()
-    .orElseThrow(RuntimeException::new);
-</pre>
-</div>
-
-<div class="slide">
-<h2>Example 5: Java 8 functional/parallel</h2>
-<p>Then add parallel stream processing:</p>
-<pre class="brush:java">
-  private static Map&lt;YearMonth, Long&gt; getYearMonthCounts(Path dir) throws IOException {
-    try (Stream&lt;Path&gt; files = Files.list(dir).parallel()) {
-      return files
-        .filter(file -> file.toString().endsWith(".hdr"))
-        .collect(Collectors.groupingBy(
-          AdsFrequenciesWithJava8Parallel::getYearMonth,
-          TreeMap::new,
-          Collectors.counting()
-        ));
-    }
-  }
-</pre>
-</div>
-
-<div class="slide">
-<h2>References</h2>
+<h2>Some Plugins</h2>
 <ul>
-<li>The Java Tutorial</li>
-<li>Stack Overflow</li>
-<li>State of the Lambda (Brian Goetz) <br/>(<a href="http://cr.openjdk.java.net/~briangoetz/lambda/lambda-state-final.html">http://cr.openjdk.java.net/~briangoetz/lambda/lambda-state-final.html</a>)</li>
-<li>State of the Lambda: Libraries Edition (Brian Goetz) <br/>(<a href="http://cr.openjdk.java.net/~briangoetz/lambda/lambda-libraries-final.html">http://cr.openjdk.java.net/~briangoetz/lambda/lambda-libraries-final.html</a>)</li>
-<li>Java 8 language changes (Dennis Sosnoski)<br/>(<a href="http://www.ibm.com/developerworks/library/j-java8lambdas/index.html">http://www.ibm.com/developerworks/library/j-java8lambdas/index.html</a>)</li>
-<li>Java 8 concurrency basics (Dennis Sosnoski)<br/>(<a href="http://www.ibm.com/developerworks/library/j-jvmc2/index.html">http://www.ibm.com/developerworks/library/j-jvmc2/index.html</a>)</li>
+<li>Java</li>
+<li>Groovy</li>
+<li>Scala</li>
+<li>Maven</li>
+<li>Application</li>
 </ul>
 </div>
 
+<div class="slide">
+<h2>Publishing Artifacts</h2>
+TODO
+<ul>
+<li>To local filesystem repository</li>
+<li>To Artifactory</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Writing a Plugin</h2>
+<ul>
+<li>Script in build.gradle</li>
+<li>buildSrc</li>
+<li>Separate plugin project</li>
+</ul>
+</div>
+
+<div class="slide">
+<h2>Gradle Wrapper</h2>
+<h3>Configure in build:</h3>
+<pre class="brush:groovy">
+wrapper {
+  gradleVersion = "2.2.1"
+}
+</pre>
+<div class="slide">
+<h3>Run:</h3>
+<pre class="brush:plain">
+gradle wrapper
+</pre>
+<div class="slide">
+<h3>Results:</h3>
+<pre class="brush:plain">
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+gradlew
+gradlew.bat
+</pre>
+</div>
+</div>
+</div>
+
+<div class="slide">
+<h2>Gradle Wrapper</h2>
+<h3>If you are using bash...</h3>
+<pre class="brush:plain">
+function gw() {
+  [ -x ./gradlew ] &amp;&amp; ./gradlew $@
+  [ -x ../gradlew ] &amp;&amp; ../gradlew $@
+}
+</pre>
+</div>
+
+<div class="slide">
+<h2>Gradle Wrapper</h2>
+<ul>
+<li>Creates scripts + libs you need to bootstrap Gradle</li>
+<li>Commit as part of project</li>
+<li>Automatically downloads and runs specified version from internet</li>
+<li>Repeatable builds</li>
+<li>No need to install Gradle apart from first generating wrapper</li>
+<li>E.g. Build server does not need Gradle installed</li>
+</ul>
+</div>
 
 <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
 <a href="#" class="deck-next-link" title="Next">&#8594;</a>
