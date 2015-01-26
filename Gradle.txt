@@ -1,0 +1,336 @@
+Gradle
+
+A better build tool
+
+Ant:
+  Flexible, but verbose
+  Too much boilerplate
+  Lack of standardization
+  But lots of 3rd party tools support
+
+Maven:
+  Not so flexible
+  Still somewhat verbose (XML)
+  Standardized build
+  Some 3rd party tool support
+
+Gradle:
+  Standardized, but flexible
+  Domain Specific Language for describing build
+  Plugin-based (even to compile Java)
+
+Use Standard build conventions
+But change what you need to
+Can script with Groovy
+But don't get carried away
+
+Fundamental Concepts
+- Projects
+- Tasks
+- Configurations
+- Dependencies
+
+Lifecycle
+
+Configuration
+~/.gradle/init.gradle or init.d
+
+Some plugins
+Java
+Groovy
+Scala
+Maven
+Application
+
+Publishing artifacts
+- To local filesystem repository
+- To Artifactory
+
+Writing a Plugin
+- Script in build.gradle
+- buildSrc
+- Separate plugin project
+
+Gradle Wrapper
+- Creates scripts + libs you need to bootstrap Gradle
+- Commit as part of project
+- Automatically downloads and runs specified version from internet
+- Repeatable builds
+- No need to install Gradle apart from first generating wrapper
+- E.g. Build server does not need Gradle installed
+
+More stuff:
+
+Minimal Java project
+
+Minimal Groovy project
+
+Add tests
+
+Dependencies
+- different syntax
+- project dependencies
+- excludes
+
+buildscript {}
+defaultTasks
+
+allprojects {}
+subprojects {}
+
+
+Recipes:
+- Publishing test artifacts for sharing in other projects
+- Common version numbers
+
+Plugin example: Duplicate classes
+Show
+
+jar {} example from Redcon
+
+sourcesJar from Redcon
+
+testJar from Redcon
+
+archives from Redcon
+
+antlr example from tsrch?
+
+Running concordion
+
+Antlr example:
+dependencies {
+  compile project(":domain")
+  compile "org.antlr:antlr:$antlrVersion"
+}
+
+  task(antlr, type: JavaExec) {
+  main = "org.antlr.Tool"
+  classpath = sourceSets.main.runtimeClasspath
+  args = [
+    '-o src/main/java/com/epimenides/epigmatic/lang',
+    'src/main/java/com/epimenides/epigmatic/lang/EqlQuery.g',
+    'src/main/java/com/epimenides/epigmatic/lang/EqlQueryWalker.g'
+  ]
+}
+
+dependencies {
+  runtime "postgresql:postgresql:$postgresqlVersion"
+  runtime files("lib/schemaSpy_5.0.0.jar")
+}
+
+class SchemaSpyTask extends DefaultTask {
+  String driver = "org.postgresql.Driver"
+  String host = project.property("epigmatic.db.serverName")
+  //String port = project.property("")
+  String database = project.property("epigmatic.db.databaseName")
+  String user = project.property("epigmatic.db.user")
+  String password = project.property("epigmatic.db.password")
+  String schema = project.property("epigmatic.db.schema")
+
+  @TaskAction
+  def run() {
+    project.javaexec {
+      main = "net.sourceforge.schemaspy.Main"
+      maxHeapSize = "2048m"
+      classpath = project.configurations.runtime
+      args = [
+        "-t", "pgsql",
+        "-host", host,
+        //"-port", port,
+        "-db", database,
+        "-u", user,
+        "-p", password,
+        "-s", schema,
+        "-o", "build/schemaspy",
+        "-hq"
+        //"-meta", "sys.xml",
+        //"-i", "(ALL_USERS)|(ALL_TABLES)"
+      ]
+    }
+  }
+}
+
+task schemaspy(type: SchemaSpyTask)
+
+
+
+
+Example of simple web app
+
+Concordion Example:
+
+dependencies {
+  testCompile "org.concordion:concordion:$concordionVersion"
+}
+
+sourceSets {
+  test {
+    groovy {
+      srcDir "src/specs/groovy"
+    }
+    resources {
+      srcDir "src/specs/resources"
+    }
+  }
+}
+
+test {
+  systemProperties "concordion.output.dir": "build/concordion"
+}
+
+
+Sample Code required:
+
+#Ant project? probably not
+#Maven? probably not
+
+Gradle bootstrap
+
+init.d config example: repository
+
+Publish to filesystem
+Publish to Artifactory
+
+Copy task example
+
+
+
+Compile all source with groovyc (avoid problems with Groovy/Java interdependencies):
+
+// TeamCity support currently has Java classes depending on Groovy classes.
+// Gradle usually compiles Java (with javac) before Groovy (with groovyc).
+// We force it to compile all with groovyc in one pass with below:
+// See http://gradle.1045684.n5.nabble.com/Groovy-Java-mixed-codebase-td1435484.html
+sourceSets {
+  main {
+    java { srcDirs = [] }    // no source dirs for the java compiler
+    groovy { srcDir "src/main/java" }  // compile everything in src/ with groovyc
+  }
+}
+
+
+configurations {
+  // transitive dependencies of log4j that are unrelated to our usage
+  all*.exclude group: "javax.jms"       , module: "jms"
+  all*.exclude group: "com.sun.jdmk"    , module: "jmxtools"
+  all*.exclude group: "com.sun.jmx"     , module: "jmxri"
+  all*.exclude group: "logkit"          , module: "logkit"
+  all*.exclude group: "avalon-framework", module: "avalon-framework"
+}
+
+
+configurations {
+  provided
+}
+
+dependencies {
+  provided "javax.servlet:javax.servlet-api:$javaxServletVersion"
+  // ...
+}
+
+sourceSets {
+  main { compileClasspath += configurations.provided }
+  test {
+    compileClasspath += configurations.provided
+    runtimeClasspath += configurations.provided
+  }
+}
+
+idea.module.scopes.PROVIDED.plus += [configurations.provided]
+
+
+Using Ant:
+
+class SqlTask extends DefaultTask {
+  String script
+  String onerror = "abort"
+
+  @TaskAction
+  def run() {
+    ant.sql(
+      driver: "org.postgresql.Driver",
+      url: project.property("epigmatic.db.url"),
+      userid: project.property("epigmatic.db.user"),
+      password: project.property("epigmatic.db.password"),
+      onerror: onerror
+    )  {
+      classpath(path: project.configurations.runtime.asPath)
+      fileset(dir: "src/main/resources/ddl", includes: script)
+    }
+  }
+}
+
+task createAll(type: SqlTask) {
+  script = "create_all.sql"
+}
+
+task dropAll(type: SqlTask) {
+  script = "drop_all.sql"
+  onerror = "continue"
+}
+
+task deleteSchemaData(type: SqlTask) {
+  script = "delete_schema_data.sql"
+}
+
+
+More Using Ant:
+
+configurations {
+  antBuild
+  other
+}
+
+dependencies {
+  // ...
+  antBuild "com.oracle:ojdbc6:$oracleVersion"
+  // ...
+}
+
+ant.properties["foo"] = "bar"
+
+ant.path(id: "classpath.build", path: configurations.antBuild.asPath)
+
+ant.importBuild "build.xml"
+
+
+
+Exporting a ZIP artifact
+
+task distDdlZip(type: Zip, dependsOn: createDdl) {
+  classifier = 'src'
+  appendix = 'ddl'
+  into('sql') {
+    from 'build/ddl/owner','build/ddl/user'
+  }
+  String fullVersion =version.replaceAll( "-SNAPSHOT","")
+  into('sql') {
+    from ("src/main/sql/migrate") {
+      include "update_${fullVersion}.sql"
+      include "update_${fullVersion}_user.sql"
+      include "update_${fullVersion}_read.sql"
+    }
+  }
+}
+
+artifacts {
+  archives(distDdlZip)
+  tests testJar
+}
+
+
+Defining configurations:
+
+configurations {
+  antClasspath
+  compileGwt.extendsFrom compile
+  developmentGwt.extendsFrom compileGwt
+}
+
+On the other hand, if you just want to customize what goes into a WAR:
+
+war {
+  from "src/main/webapp-gwt/"
+}
+
