@@ -1,0 +1,16 @@
+
+afterEvaluate {p ->
+  println "buildSrc: afterEvaluate with ${p.name}"
+}
+
+beforeEvaluate {p ->
+  println "buildSrc: beforeEvaluate with ${p.name}"
+}
+
+task main << {
+  println "buildSrc: main execute"
+}
+
+main {
+  println "buildSrc: main configure"
+}

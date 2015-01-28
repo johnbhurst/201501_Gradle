@@ -1,0 +1,16 @@
+
+afterEvaluate {p ->
+  println "project1: afterEvaluate with ${p.name}"
+}
+
+beforeEvaluate {p ->
+  println "project1: beforeEvaluate with ${p.name}"
+}
+
+task main << {
+  println "project1: main execute"
+}
+
+main {
+  println "project1: main configure"
+}

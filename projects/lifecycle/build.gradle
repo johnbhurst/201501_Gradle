@@ -1,0 +1,53 @@
+
+wrapper {
+  gradleVersion = "1.7"
+}
+
+gradle.taskGraph.whenReady {
+  println "top: taskGraph Ready"
+}
+
+allprojects {
+  beforeEvaluate {p ->
+    println "allprojects: beforeEvaluate with ${p.name}"
+  }
+  afterEvaluate {p ->
+    println "allprojects: afterEvaluate with ${p.name}"
+  }
+}
+
+// not executed 
+gradle.projectsLoaded {g -> 
+  println "top: gradle.projectsLoaded"
+}
+
+// executed for subprojects
+gradle.beforeProject {p ->
+  println "top: gradle.beforeProject with ${p.name}"
+}
+
+// executed for subprojects
+gradle.afterProject {p ->
+  println "top: gradle.afterProject with ${p.name}"
+}
+
+// not executed
+beforeEvaluate {p ->
+  println "top: beforeEvaluate with ${p.name}"
+}
+
+afterEvaluate {p ->
+  println "top: afterEvaluate with ${p.name}"
+}
+
+gradle.projectsEvaluated {g ->
+  println "top: gradle.projectsEvaluated"
+}
+
+task main << {
+  println "top: main execute"
+}
+
+main {
+  println "top: main configure"
+}
