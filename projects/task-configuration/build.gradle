@@ -1,0 +1,17 @@
+apply plugin: 'java'
+
+class Mytask extends DefaultTask {
+  String foo
+}
+
+task mytask(type: Mytask)
+
+mytask {
+  foo = 'one'
+}
+
+mytask << {
+  println foo
+}
+
+
