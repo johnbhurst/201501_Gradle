@@ -1,0 +1,52 @@
+Gradle: The Better Build Tool
+
+Java Build Tools
+  Ant
+  Maven
+  Gradle
+
+Gradle Advantages
+
+A Simple Java Project
+  simple-java
+  (snippet)
+  (run example)
+  simple-tests
+  (snippet)
+  (run example)
+  simple-dependencies
+  (snippet)
+  (run example)
+
+Concepts
+  Project
+    (snippet: setting some project properties)
+  Plugin
+    Plugins
+  Task
+    (snippet: defining a Copy task)
+  Configuration
+    (snippet: listing configurations)
+    (run example)
+    (snippet: adding configurations)
+  Repository
+    (snippet)
+  Dependency
+    (snippet)
+
+Publishing Artifacts
+Configuration
+  (snippet: init.gradle)
+  (example: publish from sample)
+
+Recipes
+  Publishing test artifacts for sharing in other projects (modules)
+  Using common version numbers
+  Customizing JAR
+  Using arbitrary Java code
+
+Lifecycle
+
+Gradle with Ant
+
+Plugin example

@@ -30,53 +30,12 @@ Fundamental Concepts
 - Configurations
 - Dependencies
 
-Lifecycle
-
-Configuration
-~/.gradle/init.gradle or init.d
-
 Some plugins
 Java
 Groovy
 Scala
 Maven
 Application
-
-Publishing artifacts
-- To local filesystem repository
-- To Artifactory
-
-Writing a Plugin
-- Script in build.gradle
-- buildSrc
-- Separate plugin project
-
-Gradle Wrapper
-- Creates scripts + libs you need to bootstrap Gradle
-- Commit as part of project
-- Automatically downloads and runs specified version from internet
-- Repeatable builds
-- No need to install Gradle apart from first generating wrapper
-- E.g. Build server does not need Gradle installed
-
-More stuff:
-
-Minimal Java project
-
-Minimal Groovy project
-
-Add tests
-
-Dependencies
-- different syntax
-- project dependencies
-- excludes
-
-buildscript {}
-defaultTasks
-
-allprojects {}
-subprojects {}
 
 
 Recipes:
@@ -100,17 +59,16 @@ Running concordion
 
 Antlr example:
 dependencies {
-  compile project(":domain")
   compile "org.antlr:antlr:$antlrVersion"
 }
 
-  task(antlr, type: JavaExec) {
+task(antlr, type: JavaExec) {
   main = "org.antlr.Tool"
   classpath = sourceSets.main.runtimeClasspath
   args = [
-    '-o src/main/java/com/epimenides/epigmatic/lang',
-    'src/main/java/com/epimenides/epigmatic/lang/EqlQuery.g',
-    'src/main/java/com/epimenides/epigmatic/lang/EqlQueryWalker.g'
+    '-o src/main/java/myproject/lang',
+    'src/main/java/myproject/lang/EqlQuery.g',
+    'src/main/java/myproject/lang/EqlQueryWalker.g'
   ]
 }
 
@@ -121,12 +79,11 @@ dependencies {
 
 class SchemaSpyTask extends DefaultTask {
   String driver = "org.postgresql.Driver"
-  String host = project.property("epigmatic.db.serverName")
-  //String port = project.property("")
-  String database = project.property("epigmatic.db.databaseName")
-  String user = project.property("epigmatic.db.user")
-  String password = project.property("epigmatic.db.password")
-  String schema = project.property("epigmatic.db.schema")
+  String host = project.property("db.serverName")
+  String database = project.property("db.databaseName")
+  String user = project.property("db.user")
+  String password = project.property("db.password")
+  String schema = project.property("db.schema")
 
   @TaskAction
   def run() {
@@ -137,15 +94,12 @@ class SchemaSpyTask extends DefaultTask {
       args = [
         "-t", "pgsql",
         "-host", host,
-        //"-port", port,
         "-db", database,
         "-u", user,
         "-p", password,
         "-s", schema,
         "-o", "build/schemaspy",
         "-hq"
-        //"-meta", "sys.xml",
-        //"-i", "(ALL_USERS)|(ALL_TABLES)"
       ]
     }
   }
@@ -154,54 +108,12 @@ class SchemaSpyTask extends DefaultTask {
 task schemaspy(type: SchemaSpyTask)
 
 
-
-
-Example of simple web app
-
-Concordion Example:
-
-dependencies {
-  testCompile "org.concordion:concordion:$concordionVersion"
-}
-
-sourceSets {
-  test {
-    groovy {
-      srcDir "src/specs/groovy"
-    }
-    resources {
-      srcDir "src/specs/resources"
-    }
-  }
-}
-
-test {
-  systemProperties "concordion.output.dir": "build/concordion"
-}
-
-
-Sample Code required:
-
-#Ant project? probably not
-#Maven? probably not
-
 Gradle bootstrap
-
-init.d config example: repository
-
-Publish to filesystem
-Publish to Artifactory
 
 Copy task example
 
-
-
-Compile all source with groovyc (avoid problems with Groovy/Java interdependencies):
-
-// TeamCity support currently has Java classes depending on Groovy classes.
-// Gradle usually compiles Java (with javac) before Groovy (with groovyc).
-// We force it to compile all with groovyc in one pass with below:
-// See http://gradle.1045684.n5.nabble.com/Groovy-Java-mixed-codebase-td1435484.html
+Compile all source with groovyc
+(avoid problems with Groovy/Java interdependencies):
 sourceSets {
   main {
     java { srcDirs = [] }    // no source dirs for the java compiler
@@ -219,7 +131,7 @@ configurations {
   all*.exclude group: "avalon-framework", module: "avalon-framework"
 }
 
-
+Add a new configuration for "provided" dependencies
 configurations {
   provided
 }
@@ -333,4 +245,131 @@ On the other hand, if you just want to customize what goes into a WAR:
 war {
   from "src/main/webapp-gwt/"
 }
+
+
+Publish test artifacts to other (sub)projects
+
+configurations {
+  tests
+}
+
+task testJar(type: Jar, dependsOn: testClasses) {
+  baseName = "${project.archivesBaseName}-test"
+  from sourceSets.test.output
+}
+
+artifacts {
+  tests testJar
+}
+
+
+Use common version numbers:
+
+subprojects {
+  project.ext {
+    commonsCollectionsVersion = "3.2"
+    commonsIoVersion = "1.4"
+    commonsLangVersion = "2.5"
+    ehcacheVersion = "2.4.7"
+    groovyVersion = "2.3.7"
+    hibernateVersion = "3.6.6.Final"
+    junitVersion = "4.10"
+    logbackVersion = "1.0.9"
+    servletApiVersion = "3.0.1"
+    slf4jVersion = "1.7.2"
+    springVersion = "4.0.2.RELEASE"
+  }
+}
+
+dependencies {
+  compile "org.springframework:spring-core:$springVersion"
+}
+
+
+Customize JAR:
+
+jar {
+  def buildString = version + " built on " +
+    new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone("Australia/Melbourne"))
+  manifest {
+    attributes(
+      "Built-By": System.properties["user.name"],
+      "Implementation-Title": project.name,
+      "Implementation-Version": buildString
+    )
+  }
+}
+
+
+2015-01-28
+
+More stuff:
+
+1. Simple Java
+
+Minimal Java project
+Minimal Groovy project
+Add tests
+Concordion Example:
+
+dependencies {
+  testCompile "org.concordion:concordion:$concordionVersion"
+}
+
+sourceSets {
+  test {
+    groovy {
+      srcDir "src/specs/groovy"
+    }
+    resources {
+      srcDir "src/specs/resources"
+    }
+  }
+}
+
+test {
+  systemProperties "concordion.output.dir": "build/concordion"
+}
+
+2.
+
+Gradle Wrapper
+- Creates scripts + libs you need to bootstrap Gradle
+- Commit as part of project
+- Automatically downloads and runs specified version from internet
+- Repeatable builds
+- No need to install Gradle apart from first generating wrapper
+- E.g. Build server does not need Gradle installed
+
+3. Some other features
+
+buildscript {}
+defaultTasks
+
+allprojects {}
+subprojects {}
+
+4.
+
+Lifecycle
+
+5.
+
+Configuration
+~/.gradle/init.gradle or init.d
+init.d config example: repository
+
+6.
+
+Writing a Plugin
+- Script in build.gradle
+- buildSrc
+- Separate plugin project
+
+---
+
+
+Publishing artifacts
+- To local filesystem repository
+- To Artifactory
 
